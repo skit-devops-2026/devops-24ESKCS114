@@ -1,0 +1,29 @@
+{
+  "name": "movie-watchlist-app",
+  "version": "1.0.0",
+  "description": "Full-stack Movie Watchlist application built with Node.js, Express, MongoDB, and Vanilla HTML/CSS/JS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "movie",
+    "watchlist",
+    "express",
+    "mongodb",
+    "nodejs",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
