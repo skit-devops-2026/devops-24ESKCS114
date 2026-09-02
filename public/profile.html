@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile | MovForYou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-badge"><i class="fa-solid fa-play"></i></div>
+        <div class="brand-name">Mov<span>ForYou</span></div>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="movies.html" class="nav-link"><i class="fa-solid fa-film"></i> Movies</a></li>
+          <li><a href="watchlist.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> Watchlist</a></li>
+          <li><a href="favorites.html" class="nav-link"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+          <li><a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-btn"><i class="fa-solid fa-sun"></i></button>
+        <div id="navUserContainer"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="max-width: 680px; margin: 3rem auto 5rem;">
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-lg);">
+      <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+        <img id="profileAvatarImg" src="" alt="Avatar" style="width: 84px; height: 84px; border-radius: 50%; border: 2px solid var(--accent-gold);">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;">Profile Settings</h2>
+          <p style="color: var(--text-dim); font-size: 0.88rem;">Manage your public display name and cinema bio</p>
+        </div>
+      </div>
+
+      <form id="profileForm">
+        <div style="margin-bottom: 1.2rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.4rem;">Username</label>
+          <input type="text" id="profileUsername" required style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff;">
+        </div>
+
+        <div style="margin-bottom: 1.2rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.4rem;">Email (Read-Only)</label>
+          <input type="email" id="profileEmail" disabled style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-dim);">
+        </div>
+
+        <div style="margin-bottom: 1.8rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.4rem;">Bio / Favorite Quote</label>
+          <textarea id="profileBio" rows="3" style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff; font-family: inherit;"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Profile</button>
+          <button type="button" class="btn btn-danger" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

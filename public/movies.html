@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Movies | MovForYou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      margin: 2.5rem 0 4rem;
+    }
+    .filter-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+    .filter-group {
+      margin-bottom: 1.3rem;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+    }
+    .filter-group select, .filter-group input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-size: 0.88rem;
+      outline: none;
+    }
+    .filter-group select:focus, .filter-group input:focus {
+      border-color: var(--accent-gold);
+    }
+    .catalog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .results-badge {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .view-toggle {
+      display: flex;
+      gap: 0.3rem;
+      background: var(--bg-card);
+      padding: 0.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+    .view-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      padding: 0.35rem 0.6rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .view-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+    }
+    @media (max-width: 900px) {
+      .catalog-layout {
+        grid-template-columns: 1fr;
+      }
+      .filter-panel {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-badge"><i class="fa-solid fa-play"></i></div>
+        <div class="brand-name">Mov<span>ForYou</span></div>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="movies.html" class="nav-link active"><i class="fa-solid fa-film"></i> Movies</a></li>
+          <li><a href="watchlist.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> Watchlist</a></li>
+          <li><a href="favorites.html" class="nav-link"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+          <li><a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <div class="nav-search">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search movies, cast..." autocomplete="off">
+        </div>
+        <button id="themeToggleBtn" class="theme-btn"><i class="fa-solid fa-sun"></i></button>
+        <div id="navUserContainer"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="catalog-layout">
+      <!-- Advanced Filters Sidebar -->
+      <aside class="filter-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+          <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-sliders"></i> Filters</h3>
+          <button id="clearFiltersBtn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Clear All</button>
+        </div>
+
+        <div class="filter-group">
+          <label for="catalogSearch"><i class="fa-solid fa-magnifying-glass"></i> Search Title/Cast</label>
+          <input type="text" id="catalogSearch" placeholder="e.g. Nolan, Batman...">
+        </div>
+
+        <div class="filter-group">
+          <label for="genreSelect"><i class="fa-solid fa-masks-theater"></i> Genre</label>
+          <select id="genreSelect">
+            <option value="All">All Genres</option>
+            <option value="Action">Action</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Animation">Animation</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Crime">Crime</option>
+            <option value="Documentary">Documentary</option>
+            <option value="Drama">Drama</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Horror">Horror</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Romance">Romance</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Thriller">Thriller</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="ratingRange"><i class="fa-solid fa-star"></i> Minimum Rating: <span id="ratingValue" style="color: var(--accent-gold);">Any</span></label>
+          <input type="range" id="ratingRange" min="0" max="9" step="0.5" value="0" style="width: 100%; accent-color: var(--accent-gold);">
+        </div>
+
+        <div class="filter-group">
+          <label for="languageSelect"><i class="fa-solid fa-globe"></i> Language</label>
+          <select id="languageSelect">
+            <option value="All">All Languages</option>
+            <option value="English">English</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Korean">Korean</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="sortSelect"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By</label>
+          <select id="sortSelect">
+            <option value="rating_desc">IMDb Rating (High to Low)</option>
+            <option value="rating_asc">IMDb Rating (Low to High)</option>
+            <option value="newest">Recently Added</option>
+            <option value="year_desc">Release Year (Newest)</option>
+            <option value="year_asc">Release Year (Oldest)</option>
+            <option value="title_asc">Title (A - Z)</option>
+          </select>
+        </div>
+      </aside>
+
+      <!-- Movie Results Grid -->
+      <section>
+        <div class="catalog-header">
+          <div>
+            <h1 style="font-size: 1.8rem; font-weight: 800;">Browse Movies</h1>
+            <span id="resultsCount" class="results-badge">Loading movies...</span>
+          </div>
+          <div class="view-toggle">
+            <button id="viewGridBtn" class="view-btn active" title="Grid View"><i class="fa-solid fa-grip"></i></button>
+            <button id="viewListBtn" class="view-btn" title="List View"><i class="fa-solid fa-list"></i></button>
+          </div>
+        </div>
+
+        <div id="catalogGrid" class="catalog-grid"></div>
+
+        <div id="catalogEmpty" style="display: none; text-align: center; padding: 4rem 1rem;">
+          <div style="font-size: 3rem; color: var(--accent-gold); margin-bottom: 1rem;"><i class="fa-solid fa-film"></i></div>
+          <h3 style="font-size: 1.3rem;">No matching movies found</h3>
+          <p style="color: var(--text-dim); margin-top: 0.4rem;">Try adjusting your filters or search keywords.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="trailerModal" class="modal-overlay">
+    <div class="modal-box modal-trailer">
+      <div class="modal-header" style="background: #000; border-color: rgba(255,255,255,0.1);">
+        <h3 id="trailerTitle" class="modal-title" style="color: #fff;"><i class="fa-solid fa-play"></i> Trailer</h3>
+        <button class="modal-close" style="color: #fff;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="video-container">
+        <iframe id="trailerIframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/movies.js"></script>
+</body>
+</html>

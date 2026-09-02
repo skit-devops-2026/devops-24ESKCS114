@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Watchlist | MovForYou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .watchlist-header {
+      margin: 2.5rem 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .watchlist-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-card);
+      padding: 0.35rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+    .watchlist-tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1.1rem;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .watchlist-tab-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+    }
+    .tab-badge {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+    }
+    .badge-status-pill {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+    .badge-blue { background: rgba(6, 182, 212, 0.9); color: #000; }
+    .badge-amber { background: rgba(245, 158, 11, 0.95); color: #000; }
+    .badge-emerald { background: rgba(16, 185, 129, 0.9); color: #fff; }
+    .badge-rose { background: rgba(244, 63, 94, 0.9); color: #fff; }
+    .watchlist-status-dropdown {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.6rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      margin: 0.4rem 0 0.6rem;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-badge"><i class="fa-solid fa-play"></i></div>
+        <div class="brand-name">Mov<span>ForYou</span></div>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="movies.html" class="nav-link"><i class="fa-solid fa-film"></i> Movies</a></li>
+          <li><a href="watchlist.html" class="nav-link active"><i class="fa-solid fa-bookmark"></i> Watchlist</a></li>
+          <li><a href="favorites.html" class="nav-link"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+          <li><a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-btn"><i class="fa-solid fa-sun"></i></button>
+        <div id="navUserContainer"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="margin-bottom: 4rem;">
+    <div class="watchlist-header">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800;"><i class="fa-solid fa-bookmark" style="color: var(--accent-gold);"></i> My Watchlist</h1>
+        <p style="color: var(--text-dim); font-size: 0.9rem;">Organize and track your movie journey across categories</p>
+      </div>
+
+      <div style="display: flex; gap: 0.8rem; align-items: center;">
+        <select id="watchlistSortSelect" style="padding: 0.5rem 0.8rem; border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); outline: none;">
+          <option value="createdAt_desc">Recently Added</option>
+          <option value="createdAt_asc">Oldest Added</option>
+          <option value="rating_desc">User Rating</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="watchlist-tabs" style="margin-bottom: 2rem;">
+      <button class="watchlist-tab-btn active" data-status="all">
+        All <span id="countAll" class="tab-badge">0</span>
+      </button>
+      <button class="watchlist-tab-btn" data-status="want_to_watch">
+        <i class="fa-solid fa-bookmark"></i> Want to Watch <span id="countWant" class="tab-badge">0</span>
+      </button>
+      <button class="watchlist-tab-btn" data-status="watching">
+        <i class="fa-solid fa-play"></i> Watching <span id="countWatching" class="tab-badge">0</span>
+      </button>
+      <button class="watchlist-tab-btn" data-status="watched">
+        <i class="fa-solid fa-circle-check"></i> Watched <span id="countWatched" class="tab-badge">0</span>
+      </button>
+      <button class="watchlist-tab-btn" data-status="dropped">
+        <i class="fa-solid fa-circle-xmark"></i> Dropped <span id="countDropped" class="tab-badge">0</span>
+      </button>
+    </div>
+
+    <!-- Watchlist Grid -->
+    <div id="watchlistContainer" class="genre-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));"></div>
+
+    <!-- Empty State -->
+    <div id="watchlistEmpty" style="display: none; text-align: center; padding: 5rem 1rem;">
+      <div style="font-size: 3.5rem; color: var(--accent-gold); margin-bottom: 1rem;"><i class="fa-solid fa-clapperboard"></i></div>
+      <h3 style="font-size: 1.4rem; font-weight: 700;">No movies in this category</h3>
+      <p style="color: var(--text-dim); margin: 0.5rem 0 1.5rem;">Explore our movie catalog to add titles to your watchlist!</p>
+      <a href="movies.html" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Explore Movies</a>
+    </div>
+  </main>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/watchlist.js"></script>
+</body>
+</html>

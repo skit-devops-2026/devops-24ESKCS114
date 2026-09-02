@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | MovForYou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .dash-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2.5rem;
+    }
+    .dash-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .dash-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .dash-grid-2cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .chart-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+    }
+    .genre-bar-item {
+      margin-bottom: 1rem;
+    }
+    .bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--accent-gold-gradient);
+      border-radius: var(--radius-full);
+      transition: width 0.8s ease;
+    }
+    .activity-item {
+      display: flex;
+      gap: 0.8rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.88rem;
+    }
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+    @media (max-width: 800px) {
+      .dash-grid-2cols {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-badge"><i class="fa-solid fa-play"></i></div>
+        <div class="brand-name">Mov<span>ForYou</span></div>
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="movies.html" class="nav-link"><i class="fa-solid fa-film"></i> Movies</a></li>
+          <li><a href="watchlist.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> Watchlist</a></li>
+          <li><a href="favorites.html" class="nav-link"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+          <li><a href="dashboard.html" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-btn"><i class="fa-solid fa-sun"></i></button>
+        <div id="navUserContainer"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="margin: 2.5rem auto 4rem;">
+    <h1 id="dashWelcome" style="font-size: 2rem; font-weight: 800;">Welcome back 👋</h1>
+    <p style="color: var(--text-dim); font-size: 0.95rem;">Here is your personalized cinema journey and viewing analytics</p>
+
+    <!-- Stats Cards -->
+    <div class="dash-stats-grid">
+      <div class="dash-stat-card">
+        <div class="dash-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);"><i class="fa-solid fa-clapperboard"></i></div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">In Watchlist</span>
+          <h3 id="dashTotal" style="font-size: 1.5rem; font-weight: 800;">0</h3>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald);"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Watched</span>
+          <h3 id="dashWatched" style="font-size: 1.5rem; font-weight: 800;">0</h3>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-icon" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);"><i class="fa-solid fa-bookmark"></i></div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Want to Watch</span>
+          <h3 id="dashWant" style="font-size: 1.5rem; font-weight: 800;">0</h3>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-gold);"><i class="fa-solid fa-play"></i></div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Watching</span>
+          <h3 id="dashWatching" style="font-size: 1.5rem; font-weight: 800;">0</h3>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-icon" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose);"><i class="fa-solid fa-heart"></i></div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Favorites</span>
+          <h3 id="dashFavs" style="font-size: 1.5rem; font-weight: 800;">0</h3>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-icon" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24;"><i class="fa-solid fa-star"></i></div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Reviews Written</span>
+          <h3 id="dashReviews" style="font-size: 1.5rem; font-weight: 800;">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts & Analytics Row -->
+    <div class="dash-grid-2cols">
+      <!-- Genre Preferences Bar Chart -->
+      <div class="chart-panel">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem;"><i class="fa-solid fa-chart-column" style="color: var(--accent-gold);"></i> Top Genres in Your Library</h3>
+        <div id="genreBarsContainer"></div>
+      </div>
+
+      <!-- Completion Meter & Recent Feed -->
+      <div class="chart-panel">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem;"><i class="fa-solid fa-clock-rotate-left" style="color: var(--accent-cyan);"></i> Watchlist Completion</h3>
+        <div style="margin-bottom: 2rem;">
+          <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 0.4rem;">
+            <span>Completed Movies Rate</span>
+            <span id="completionPct" style="color: var(--accent-emerald);">0%</span>
+          </div>
+          <div class="bar-track" style="height: 12px;">
+            <div id="completionFill" class="bar-fill" style="background: var(--accent-emerald); width: 0%;"></div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem;">Recent Activity</h4>
+        <div id="recentActivityList"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

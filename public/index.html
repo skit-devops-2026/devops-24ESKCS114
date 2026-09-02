@@ -1,291 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineTrack | Modern Movie Watchlist</title>
+  <title>MovForYou — Your Movies. Your Mood. Your Watchlist.</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Main Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-  <!-- Header / Navigation -->
+
+  <!-- Sticky Navbar -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="brand">
-        <div class="logo-icon">
-          <i class="fa-solid fa-film"></i>
+      <a href="index.html" class="brand-logo">
+        <div class="logo-badge">
+          <i class="fa-solid fa-play"></i>
         </div>
-        <div class="brand-text">
-          <h1>Cine<span>Track</span></h1>
-          <span class="tagline">Personal Movie Watchlist</span>
-        </div>
-      </div>
+        <div class="brand-name">Mov<span>ForYou</span></div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="movies.html" class="nav-link"><i class="fa-solid fa-film"></i> Movies</a></li>
+          <li><a href="watchlist.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> Watchlist</a></li>
+          <li><a href="favorites.html" class="nav-link"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+          <li><a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        </ul>
+      </nav>
 
       <div class="nav-actions">
-        <div class="search-box">
+        <div class="nav-search">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="searchInput" placeholder="Search movies by title..." autocomplete="off">
-          <button id="clearSearchBtn" class="clear-btn" title="Clear search" style="display: none;">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+          <input type="text" id="globalSearchInput" placeholder="Search movies, cast..." autocomplete="off">
         </div>
 
-        <button id="openAddModalBtn" class="btn btn-primary">
-          <i class="fa-solid fa-plus"></i>
-          <span>Add Movie</span>
+        <button id="themeToggleBtn" class="theme-btn" title="Toggle Light/Dark Theme">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+
+        <div id="navUserContainer"></div>
+
+        <button id="mobileMenuToggle" class="theme-btn mobile-only" style="display: none;">
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Container -->
-  <main class="main-container">
-    <!-- Stats Overview Section -->
-    <section class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon total"><i class="fa-solid fa-clapperboard"></i></div>
-        <div class="stat-info">
-          <span class="stat-label">Total Movies</span>
-          <h3 id="statTotal">0</h3>
-        </div>
-      </div>
+  <!-- Hero Premiere Section -->
+  <section id="heroSection" class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="skeleton skeleton-hero" style="height: 320px;"></div>
+    </div>
+  </section>
 
-      <div class="stat-card">
-        <div class="stat-icon plan"><i class="fa-solid fa-bookmark"></i></div>
-        <div class="stat-info">
-          <span class="stat-label">Plan to Watch</span>
-          <h3 id="statPlan">0</h3>
-        </div>
-      </div>
+  <!-- Main Showcase Container -->
+  <main class="container">
 
-      <div class="stat-card">
-        <div class="stat-icon watching"><i class="fa-solid fa-play"></i></div>
-        <div class="stat-info">
-          <span class="stat-label">Watching</span>
-          <h3 id="statWatching">0</h3>
-        </div>
+    <!-- 1. Trending Now Carousel -->
+    <section class="carousel-wrapper">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> Trending Now</h2>
+        <a href="movies.html?sortBy=newest" class="section-link">View All <i class="fa-solid fa-arrow-right"></i></a>
       </div>
-
-      <div class="stat-card">
-        <div class="stat-icon completed"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="stat-info">
-          <span class="stat-label">Completed</span>
-          <h3 id="statCompleted">0</h3>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon rating"><i class="fa-solid fa-star"></i></div>
-        <div class="stat-info">
-          <span class="stat-label">Avg Rating</span>
-          <h3 id="statAvgRating">0.0</h3>
-        </div>
+      <button class="carousel-btn prev" onclick="scrollCarousel('trendingCarousel', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="carousel-btn next" onclick="scrollCarousel('trendingCarousel', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      <div id="trendingCarousel" class="movie-carousel">
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
       </div>
     </section>
 
-    <!-- Controls & Filters Section -->
-    <section class="controls-bar">
-      <!-- Status Tabs -->
-      <div class="status-tabs" id="statusTabs">
-        <button class="tab-btn active" data-status="All">All</button>
-        <button class="tab-btn" data-status="Plan to Watch">
-          <span class="dot plan-dot"></span> Plan to Watch
-        </button>
-        <button class="tab-btn" data-status="Watching">
-          <span class="dot watching-dot"></span> Watching
-        </button>
-        <button class="tab-btn" data-status="Completed">
-          <span class="dot completed-dot"></span> Completed
-        </button>
+    <!-- 2. Personalized Recommendations Section -->
+    <section id="recommendationsSection" class="carousel-wrapper" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-bullseye"></i> <span id="recAnchorTitle">Recommended For You</span></h2>
+        <a href="movies.html" class="section-link">Explore More <i class="fa-solid fa-arrow-right"></i></a>
       </div>
-
-      <!-- Dropdown Filters -->
-      <div class="filter-dropdowns">
-        <div class="select-group">
-          <label for="genreFilter"><i class="fa-solid fa-masks-theater"></i> Genre:</label>
-          <select id="genreFilter">
-            <option value="All">All Genres</option>
-            <option value="Action">Action</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Animation">Animation</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Crime">Crime</option>
-            <option value="Documentary">Documentary</option>
-            <option value="Drama">Drama</option>
-            <option value="Fantasy">Fantasy</option>
-            <option value="Horror">Horror</option>
-            <option value="Mystery">Mystery</option>
-            <option value="Romance">Romance</option>
-            <option value="Sci-Fi">Sci-Fi</option>
-            <option value="Thriller">Thriller</option>
-            <option value="Western">Western</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="select-group">
-          <label for="sortSelect"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</label>
-          <select id="sortSelect">
-            <option value="createdAt_desc">Date Added (Newest)</option>
-            <option value="createdAt_asc">Date Added (Oldest)</option>
-            <option value="rating_desc">Highest Rating</option>
-            <option value="rating_asc">Lowest Rating</option>
-            <option value="releaseYear_desc">Release Year (Newest)</option>
-            <option value="releaseYear_asc">Release Year (Oldest)</option>
-            <option value="title_asc">Title (A - Z)</option>
-            <option value="title_desc">Title (Z - A)</option>
-          </select>
-        </div>
-      </div>
+      <button class="carousel-btn prev" onclick="scrollCarousel('recommendationsCarousel', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="carousel-btn next" onclick="scrollCarousel('recommendationsCarousel', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      <div id="recommendationsCarousel" class="movie-carousel"></div>
     </section>
 
-    <!-- Movies Grid Section -->
-    <section class="movies-container">
-      <div id="loadingSpinner" class="spinner-wrapper" style="display: none;">
-        <div class="spinner"></div>
-        <p>Loading your movies...</p>
+    <!-- 3. Popular Blockbusters -->
+    <section class="carousel-wrapper">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> Popular Movies</h2>
+        <a href="movies.html?sortBy=rating" class="section-link">View All <i class="fa-solid fa-arrow-right"></i></a>
       </div>
-
-      <div id="moviesGrid" class="movies-grid"></div>
-
-      <!-- Empty State View -->
-      <div id="emptyState" class="empty-state" style="display: none;">
-        <div class="empty-icon">
-          <i class="fa-solid fa-film"></i>
-        </div>
-        <h3 id="emptyTitle">No movies found</h3>
-        <p id="emptySubtitle">Your watchlist is currently empty or no titles matched your filter.</p>
-        <button id="emptyAddBtn" class="btn btn-primary">
-          <i class="fa-solid fa-plus"></i> Add Your First Movie
-        </button>
-      </div>
+      <button class="carousel-btn prev" onclick="scrollCarousel('popularCarousel', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="carousel-btn next" onclick="scrollCarousel('popularCarousel', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      <div id="popularCarousel" class="movie-carousel"></div>
     </section>
+
+    <!-- 4. Top Rated Masterpieces -->
+    <section class="carousel-wrapper">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-trophy"></i> Top Rated Masterpieces</h2>
+        <a href="movies.html?sortBy=rating" class="section-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <button class="carousel-btn prev" onclick="scrollCarousel('topRatedCarousel', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="carousel-btn next" onclick="scrollCarousel('topRatedCarousel', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      <div id="topRatedCarousel" class="movie-carousel"></div>
+    </section>
+
+    <!-- 5. Explore by Genre Section -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-masks-theater"></i> Explore By Genre</h2>
+      </div>
+      <div id="genresGrid" class="genre-grid"></div>
+    </section>
+
+    <!-- 6. New Releases -->
+    <section class="carousel-wrapper">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-sparkles"></i> New Releases</h2>
+        <a href="movies.html?sortBy=year_desc" class="section-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <button class="carousel-btn prev" onclick="scrollCarousel('newReleasesCarousel', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="carousel-btn next" onclick="scrollCarousel('newReleasesCarousel', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      <div id="newReleasesCarousel" class="movie-carousel"></div>
+    </section>
+
   </main>
 
-  <!-- Add / Edit Movie Modal Dialog -->
-  <div id="movieModal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h2 id="modalTitle"><i class="fa-solid fa-film"></i> Add New Movie</h2>
-        <button id="closeModalBtn" class="close-btn" title="Close modal">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+  <!-- Global Trailer Modal -->
+  <div id="trailerModal" class="modal-overlay">
+    <div class="modal-box modal-trailer">
+      <div class="modal-header" style="background: #000; border-color: rgba(255,255,255,0.1);">
+        <h3 id="trailerTitle" class="modal-title" style="color: #fff;"><i class="fa-solid fa-play"></i> Movie Trailer</h3>
+        <button class="modal-close" style="color: #fff;"><i class="fa-solid fa-xmark"></i></button>
       </div>
-
-      <form id="movieForm" class="modal-form">
-        <input type="hidden" id="movieId">
-
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label for="movieTitle">Movie Title <span class="required">*</span></label>
-            <input type="text" id="movieTitle" placeholder="e.g. Inception, Interstellar..." required>
-          </div>
-        </div>
-
-        <div class="form-row two-cols">
-          <div class="form-group">
-            <label for="movieGenre">Genre <span class="required">*</span></label>
-            <select id="movieGenre" required>
-              <option value="Action">Action</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Animation">Animation</option>
-              <option value="Comedy">Comedy</option>
-              <option value="Crime">Crime</option>
-              <option value="Documentary">Documentary</option>
-              <option value="Drama">Drama</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Horror">Horror</option>
-              <option value="Mystery">Mystery</option>
-              <option value="Romance">Romance</option>
-              <option value="Sci-Fi">Sci-Fi</option>
-              <option value="Thriller">Thriller</option>
-              <option value="Western">Western</option>
-              <option value="Other" selected>Other</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="movieYear">Release Year</label>
-            <input type="number" id="movieYear" min="1888" max="2035" placeholder="e.g. 2024">
-          </div>
-        </div>
-
-        <div class="form-row two-cols">
-          <div class="form-group">
-            <label for="movieStatus">Watch Status</label>
-            <select id="movieStatus">
-              <option value="Plan to Watch" selected>Plan to Watch</option>
-              <option value="Watching">Watching</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="movieRating">Rating (0 - 10)</label>
-            <div class="rating-input-wrapper">
-              <input type="number" id="movieRating" min="0" max="10" step="0.5" value="0" placeholder="0 - 10">
-              <span class="rating-star"><i class="fa-solid fa-star"></i> / 10</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label for="moviePoster">Poster Image URL (Optional)</label>
-            <input type="url" id="moviePoster" placeholder="https://example.com/poster.jpg">
-            <small class="helper-text">Direct image URL (JPG, PNG, WebP) or leave empty for default poster.</small>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label for="movieNotes">Personal Notes / Review</label>
-            <textarea id="movieNotes" rows="3" placeholder="Thoughts, favorite quotes, or where to watch..."></textarea>
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" id="cancelModalBtn" class="btn btn-secondary">Cancel</button>
-          <button type="submit" id="saveMovieBtn" class="btn btn-primary">
-            <i class="fa-solid fa-check"></i> <span id="saveBtnText">Save Movie</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Delete Confirmation Modal -->
-  <div id="deleteModal" class="modal-overlay">
-    <div class="modal-card modal-confirm">
-      <div class="confirm-icon">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-      </div>
-      <h2>Remove from Watchlist?</h2>
-      <p>Are you sure you want to delete <strong id="deleteMovieTitle">this movie</strong>? This action cannot be undone.</p>
-      <div class="modal-actions center">
-        <button id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
-        <button id="confirmDeleteBtn" class="btn btn-danger">
-          <i class="fa-solid fa-trash-can"></i> Delete
-        </button>
+      <div class="video-container">
+        <iframe id="trailerIframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification System -->
+  <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- Footer -->
   <footer class="footer">
-    <p>Built with <i class="fa-solid fa-heart heart-icon"></i> using HTML, CSS, JavaScript, Express, Node.js & MongoDB</p>
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-badge"><i class="fa-solid fa-play"></i></div>
+          <div class="brand-name">Mov<span>ForYou</span></div>
+        </a>
+        <p>Your Movies. Your Mood. Your Watchlist. The ultimate cinematic platform to discover, track, review, and organize the movies you love.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="movies.html">All Movies</a></li>
+          <li><a href="movies.html?genre=Sci-Fi">Sci-Fi Cinema</a></li>
+          <li><a href="movies.html?genre=Action">Action & Adventure</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Personal</h4>
+        <ul class="footer-links">
+          <li><a href="watchlist.html">My Watchlist</a></li>
+          <li><a href="favorites.html">Favorites</a></li>
+          <li><a href="dashboard.html">Analytics Dashboard</a></li>
+          <li><a href="profile.html">Profile Settings</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul class="footer-links">
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="register.html">Create Account</a></li>
+          <li><a href="https://github.com/dishant999k/mw" target="_blank">GitHub Repository</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 MovForYou. Built with HTML, CSS, JavaScript, Express & MongoDB.</p>
+      <p>Designed with <i class="fa-solid fa-heart" style="color: var(--accent-rose);"></i> for movie lovers.</p>
+    </div>
   </footer>
 
-  <!-- Frontend Logic -->
-  <script src="app.js"></script>
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
 </body>
 </html>
