@@ -11,6 +11,7 @@ const sendTokenResponse = (user, statusCode, res, message = 'Success') => {
       id: user._id,
       username: user.username,
       email: user.email,
+      role: user.role || 'user',
       avatar: user.avatar,
       bio: user.bio,
       createdAt: user.createdAt,
@@ -38,7 +39,6 @@ exports.register = async (req, res) => {
       });
     }
 
-    // Check if email or username already exists
     const existingEmail = await User.findOne({ email: email.toLowerCase() });
     if (existingEmail) {
       return res.status(400).json({
@@ -55,7 +55,6 @@ exports.register = async (req, res) => {
       });
     }
 
-    // Generate cute robot/cinema avatar if none provided
     const userAvatar =
       avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(username)}`;
 
@@ -126,7 +125,7 @@ exports.demoLogin = async (req, res) => {
         email: 'demo@movforyou.com',
         password: 'DemoPassword2026!',
         avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=DemoUser',
-        bio: 'Official demo account exploring the cinematic wonderland of MovForYou.',
+        bio: 'Official demo account exploring MovForYou.',
       });
     }
 

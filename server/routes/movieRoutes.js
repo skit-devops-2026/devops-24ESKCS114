@@ -9,12 +9,14 @@ const {
   deleteMovie,
   getGenreSummary,
 } = require('../controllers/movieController');
-const { optionalAuth, protect } = require('../middleware/auth');
+const { optionalAuth, protect, authorize } = require('../middleware/auth');
 
 router.get('/', getMovies);
 router.get('/featured', getFeatured);
 router.get('/genres/summary', getGenreSummary);
 router.get('/:id', optionalAuth, getMovieById);
+
+// Admin-enabled actions
 router.post('/', protect, createMovie);
 router.put('/:id', protect, updateMovie);
 router.delete('/:id', protect, deleteMovie);

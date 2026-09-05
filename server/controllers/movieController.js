@@ -85,9 +85,13 @@ exports.getMovies = async (req, res) => {
 // @route   GET /api/movies/featured
 exports.getFeatured = async (req, res) => {
   try {
+    const allMovies = await Movie.find().limit(20);
     const heroMovie =
-      (await Movie.findOne({ featured: true })) || (await Movie.findOne().sort({ rating: -1 }));
-    const trending = await Movie.find({ trending: true }).limit(10);
+      (await Movie.findOne({ featured: true })) || allMovies[0] || null;
+
+    let trending = await Movie.find({ trending: true }).limit(10);
+    if (trending.length === 0) trending = allMovies;
+
     const topRated = await Movie.find().sort({ rating: -1 }).limit(10);
     const newReleases = await Movie.find().sort({ releaseDate: -1 }).limit(10);
     const popular = await Movie.find().sort({ createdAt: -1 }).limit(10);
@@ -95,10 +99,10 @@ exports.getFeatured = async (req, res) => {
     res.json({
       success: true,
       hero: heroMovie,
-      trending,
-      topRated,
-      newReleases,
-      popular,
+      trending: trending.length > 0 ? trending : allMovies,
+      topRated: topRated.length > 0 ? topRated : allMovies,
+      newReleases: newReleases.length > 0 ? newReleases : allMovies,
+      popular: popular.length > 0 ? popular : allMovies,
     });
   } catch (error) {
     res.status(500).json({

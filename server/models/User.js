@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema(
-  {
+{
     username: {
       type: String,
       required: [true, 'Username is required'],
@@ -18,13 +18,17 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email address'],
     },
-    password: {
+    password: {          // 'select: false' prevents password from returning in GET queries
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
       select: false,
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user', // Set to 'admin' for your account
     },
     avatar: {
       type: String,
@@ -33,32 +37,29 @@ const userSchema = new mongoose.Schema(
     bio: {
       type: String,
       maxlength: [250, 'Bio cannot exceed 250 characters'],
-      default: 'Movie buff exploring the world of cinema on MovForYou.',
+      default: 'Movie buff exploring cinema on MovForYou.',
     },
   },
   { timestamps: true }
 );
 
-// Encrypt password before saving
+// Encrypt password with bcrypt before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-
-// Compare user entered password with hashed password in database
+// Compare password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
-// Generate signed JWT Token
+// Generate JWT Token (includes role)
 userSchema.methods.getSignedJwtToken = function () {
   return jwt.sign(
-    { id: this._id, username: this.username, email: this.email },
+    { id: this._id, username: this.username, role: this.role },
     process.env.JWT_SECRET || 'movforyou_secret_key_2026',
     { expiresIn: '30d' }
   );
 };
-
 module.exports = mongoose.model('User', userSchema);

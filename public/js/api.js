@@ -2,7 +2,10 @@
  * MovForYou - Centralized API Client
  */
 
-const API_BASE = '/api';
+// Automatically connects to Express backend on port 3000 even if opened on port 8080/5500
+const API_BASE = (window.location.port && window.location.port !== '3000')
+  ? 'http://localhost:3000/api'
+  : '/api';
 
 const api = {
   getToken() {
