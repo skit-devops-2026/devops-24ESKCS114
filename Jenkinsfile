@@ -20,6 +20,17 @@ pipeline {
           if command -v docker >/dev/null 2>&1; then
             docker rm -f movforyou-mongo >/dev/null 2>&1 || true
             docker run -d --name movforyou-mongo -p 27017:27017 mongo:7
+
+            for i in $(seq 1 60); do
+              if nc -z 127.0.0.1 27017 2>/dev/null; then
+                echo 'MongoDB is ready'
+                exit 0
+              fi
+              sleep 2
+            done
+
+            echo 'MongoDB did not become ready in time'
+            exit 1
           else
             echo 'Docker not available; continuing without MongoDB service'
           fi
