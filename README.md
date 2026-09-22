@@ -1,8 +1,5 @@
 # Movie_watchlist
 
-> Replace every angle-bracket placeholder below. The hygiene check in CI will
-> fail until you do.
-
 ## Author
 
 | Roll No. | Name | GitHub username |
@@ -11,21 +8,18 @@
 
 ## About
 
-<Two or three sentences on what this application does.>
+MovForYou is a movie discovery and watchlist web application where users can browse films, save favorites, and track what they want to watch next. It combines a responsive frontend with an Express API and MongoDB-backed data layer for a complete streaming-style experience.
 
 ## Tech stack
 
-- Frontend: <e.g. html,css,javascript>
-- Backend: <e.g. Node.js / Express>
-- Database: <e.g. monogodb>
-
-
+- Frontend: HTML, CSS, JavaScript
+- Backend: Node.js / Express
+- Database: MongoDB
 
 ## Live URL
 
-<Add once M5 is done. Until then, leave as is.>
+TBD
 
 ## Health endpoint
 
-`GET /health` returns the running commit SHA. See `Makefile` and the milestone
-sheet for why this is required.
+`GET /api/health` returns the current application health status, including the app name and timestamp. This endpoint is used by the CI smoke test to confirm the server is running correctly.
