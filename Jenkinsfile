@@ -1,10 +1,6 @@
 pipeline {
   agent any
 
-  tools {
-    nodejs 'Node 20'
-  }
-
   environment {
     NODE_ENV = 'test'
     PORT = '3001'
