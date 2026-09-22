@@ -27,6 +27,15 @@ pipeline {
       }
     }
 
+    stage('Check Node environment') {
+      steps {
+        sh '''
+          node -v
+          npm -v
+        '''
+      }
+    }
+
     stage('Install dependencies') {
       steps {
         sh 'npm install --no-audit --no-fund'
