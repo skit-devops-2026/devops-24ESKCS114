@@ -15,16 +15,11 @@
 
 ## Tech stack
 
-- Frontend: <e.g. React>
+- Frontend: <e.g. html,css,javascript>
 - Backend: <e.g. Node.js / Express>
-- Database: <e.g. PostgreSQL>
+- Database: <e.g. monogodb>
 
-## Running locally
 
-```bash
-make install
-make run
-```
 
 ## Live URL
 
