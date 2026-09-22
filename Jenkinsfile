@@ -24,6 +24,12 @@ pipeline {
       }
     }
 
+    stage('Run test suite') {
+      steps {
+        sh 'npm test'
+      }
+    }
+
     stage('Validate app syntax') {
       steps {
         sh 'node --check server/server.js'
