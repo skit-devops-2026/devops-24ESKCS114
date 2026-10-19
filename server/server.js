@@ -14,7 +14,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
 
-const createApp = () => {
+const createApp = ({ frontendDir = path.join(__dirname, '../client/dist') } = {}) => {
   const app = express();
 
   // Global Middleware
@@ -22,8 +22,8 @@ const createApp = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Serve Frontend Static Files
-  app.use(express.static(path.join(__dirname, '../public')));
+  // Serve compiled React assets without bypassing SPA route handling.
+  app.use(express.static(frontendDir, { index: false }));
 
   // API Endpoints
   app.use('/api/auth', authRoutes);
@@ -44,11 +44,18 @@ const createApp = () => {
     });
   });
 
-  // Custom 404 handler for HTML pages
+  // Keep existing .html links working while React handles page routing.
   app.use((req, res, next) => {
-    if (req.accepts('html')) {
-      return res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
+    if (req.path === '/api' || req.path.startsWith('/api/')) {
+      return res.status(404).json({ success: false, message: 'Resource not found' });
     }
+
+    if (req.method === 'GET' && req.accepts('html')) {
+      return res.sendFile(path.join(frontendDir, 'index.html'), (error) => {
+        if (error) next(error);
+      });
+    }
+
     res.status(404).json({ success: false, message: 'Resource not found' });
   });
 

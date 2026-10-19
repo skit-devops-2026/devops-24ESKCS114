@@ -27,6 +27,7 @@ pipeline {
           node -v
           npm -v
           npm ci --no-audit --no-fund
+          npm run build
         '''
       }
     }
@@ -35,7 +36,8 @@ pipeline {
       steps {
         sh '''
           node --check server/server.js
-          find server public/js -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+          find server client/src -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+          node --check client/vite.config.mjs
         '''
       }
     }
