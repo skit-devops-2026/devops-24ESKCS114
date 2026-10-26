@@ -50,6 +50,10 @@ npm start
 
 Then open **http://localhost:3000**. The `start` command builds the React app before launching Express. You can also build it separately with `npm run build`.
 
+## Live URL
+
+Live URL: https://devops-24eskcs114.onrender.com/
+
 ## Tests and CI
 
 ```sh
