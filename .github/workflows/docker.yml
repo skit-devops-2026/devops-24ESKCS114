@@ -1,0 +1,39 @@
+name: Docker image
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set lowercase image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      - name: Build the image
+        run: docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
+
+      - name: Smoke test the image
+        run: |
+          docker run -d --name smoke -p 3000:3000 -e JWT_SECRET=ci-test-secret $IMAGE:latest
+          for i in $(seq 1 15); do
+            curl -fsS http://localhost:3000/api/health && break
+            sleep 2
+          done
+          curl -fsS http://localhost:3000/api/health | grep -q '"status":"online"'
+          docker rm -f smoke
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push
+        run: |
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest

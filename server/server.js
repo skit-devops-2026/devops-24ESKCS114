@@ -1,3 +1,13 @@
+const client = require('prom-client');
+
+client.collectDefaultMetrics();
+
+const httpRequests = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total HTTP requests',
+  labelNames: ['method', 'route', 'status'],
+});
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -20,6 +30,22 @@ const createApp = ({ frontendDir = path.join(__dirname, '../client/dist') } = {}
   // Global Middleware
   app.use(cors());
   app.use(express.json());
+    app.use((req, res, next) => {
+    res.on('finish', () => {
+      httpRequests.inc({
+        method: req.method,
+        route: req.route ? req.route.path : req.path.split('/').slice(0, 3).join('/'),
+        status: res.statusCode,
+      });
+    });
+    next();
+  });
+
+  app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+  });
+  
   app.use(express.urlencoded({ extended: true }));
 
   // Serve compiled React assets without bypassing SPA route handling.
