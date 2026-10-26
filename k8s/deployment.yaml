@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movforyou-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: movforyou
+  template:
+    metadata:
+      labels:
+        app: movforyou
+    spec:
+      containers:
+        - name: movforyou
+          image: ghcr.io/skit-devops-2026/devops-24eskcs114:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: MONGODB_URI
+              value: mongodb://mongo-service:27017/movforyou
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: movforyou-secret
+                  key: jwt-secret
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
